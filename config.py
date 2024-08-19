@@ -10,3 +10,4 @@ class Config:
     LOG_INSERT_SQL = '''INSERT INTO IPACCESS(ip, access_timestamp) VALUES(?, ?)
 '''
     DNS_UPDATE_LOG = "dns.log"
+     
