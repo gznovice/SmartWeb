@@ -136,7 +136,9 @@ def init_routes(app, my_queue:queue.Queue):
     @app.route('/updatedns')
     @__authenticate1
     def updatedns():
-        client_ip = request.remote_addr     
+        client_ip = request.headers.get('X-Real-IP')
+        if not client_ip:
+            client_ip = request.remote_addr     
         return update_cloudflare_dns(client_ip)
 
     # protected
