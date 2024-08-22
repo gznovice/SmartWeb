@@ -8,7 +8,7 @@ I would like to implement such logic
 
 from flask import jsonify
 import os
-import secrets
+#import secrets
 
 #import itsdangerous
 from itsdangerous import URLSafeTimedSerializer  as Serializer, BadSignature, SignatureExpired
@@ -16,7 +16,8 @@ from itsdangerous import URLSafeTimedSerializer  as Serializer, BadSignature, Si
 USERNAME=os.getenv("SMARTWEB_USER")
 PASSWORD=os.getenv("SMARTWEB_PASSWORD")
 
-secret_key=secrets.token_hex(16)
+#secret_key=secrets.token_hex(16), will cause problem when production web server create 3 instances
+secret_key=os.getenv("SMARTWEB_KEY")
 
 token_expire_in_sec=60
 
