@@ -56,7 +56,7 @@ def dns_record_list(dns_name:str)->str:
             print("error from cloudflare server")
             return ERROR_RECORDS_DATA_TEMPLATE    
         records_str=json.dumps(records)
-        print(records_str)
+        
         return SUCCESS_RECORDS_DATA_TEMPLATE.format(records_str)
 
     except requests.exceptions.RequestException as e:
@@ -66,6 +66,9 @@ def dns_record_list(dns_name:str)->str:
 
 
 def update_cloudflare_dns(ip:str):
+    LAST_UPDATE_IP = "LAST_UPDATE_IP"
+    if(os.getenv(LAST_UPDATE_IP, '') == ip):
+        return ip + " updated"
     data_to_patch=f"""{{
         "content":"{ip}",
         "name":"{HOME_DNS}",
@@ -73,21 +76,19 @@ def update_cloudflare_dns(ip:str):
         "type":"A",
         "ttl":200
     }}"""
-    print(UPDATE_URL)
-    print(data_to_patch)
+    
     response = requests.patch(UPDATE_URL, headers=headers, data=data_to_patch)
     if response.status_code==200:
+        os.putenv(LAST_UPDATE_IP, ip)
         return ip + " updated"
-    else:
-        print(response.status_code)
-        print(response.text)
+    else:       
         return "ip update failed"
 
 # Authentication decorator, verify the simple authentication
 def __authenticate(f):
     @wraps(f)
-    def decorated(*args, **kwargs):
-        auth = request.authorization
+    def decorated(*args, **kwargs):   
+        auth = request.authorization       
         if(auth and token_man.get_authenticate(auth.username, auth.password)):
             return f(*args, **kwargs)
         return make_response('Could not verify your identification', 401, 
@@ -127,7 +128,7 @@ def init_routes(app, my_queue:queue.Queue):
     # protected
     @app.route('/gettoken')
     @__authenticate
-    def get_token():
+    def get_token():        
         auth = request.authorization        
         return token_man.get_token(auth.username)
     
