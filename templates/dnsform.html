@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dns Lookup Form</title>
+</head>
+<body>
+    <h1>Dns Lookup</h1>
+    <form action="/dns" method="post">
+        <label for="domain">Input domain name:</label>
+        <input type="text" id="domain" name="domain">
+		<label for="method">Choose a method:</label>
+        <select id="method" name="method">
+            <option value="0">0</option>
+            <option value="1">1</option>
+        </select><br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

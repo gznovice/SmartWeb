@@ -1,4 +1,5 @@
-from flask import request, jsonify, make_response
+from flask import request, jsonify, make_response, render_template
+from dns import dns_lookup
 import requests
 import json
 from functools import wraps
@@ -109,6 +110,16 @@ def init_routes(app, my_queue:queue.Queue):
     @app.route('/')
     def hello():
         return 'Hello World!'
+    
+    @app.route('/dns', methods=['GET', 'POST'])
+    def dnslookup():
+        if(request.method == 'POST'):
+            if(request.form):
+                domain = request.form.get('domain')
+                method = request.form.get('method')
+                return dns_lookup(domain, method)
+        else:
+            return render_template('dnsform.html')
     
     @app.route('/joke')
     def joke():
